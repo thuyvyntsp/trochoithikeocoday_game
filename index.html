@@ -8,256 +8,191 @@
         :root {
             --primary-color: #f1c40f;
             --secondary-color: #e67e22;
-            --team-a-color: #3498db;
-            --team-b-color: #e74c3c;
-            --bg-overlay: rgba(255, 255, 255, 0.9);
+            --bg-overlay: rgba(255, 255, 255, 0.95);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             overflow: hidden;
-            background-color: #222;
+            background-color: #333;
         }
 
-        /* Screens */
+        /* NỀN TRÒ CHƠI */
         .screen {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background-image: url('bg.png');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
 
-        #setup-screen {
-            display: flex;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('background.png');
-        }
+        #setup-screen { display: flex; }
 
         .container {
             background: var(--bg-overlay);
-            padding: 20px 40px;
+            padding: 25px 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            max-width: 600px;
+            max-width: 550px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
             text-align: center;
+            z-index: 2;
         }
 
-        h1 { color: var(--secondary-color); margin-bottom: 10px; }
-        .setting-group { margin: 15px 0; text-align: left; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .setting-group { margin: 12px 0; text-align: left; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
         select, input, textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; border-radius: 10px;
+            border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;
         }
 
         .btn {
-            padding: 12px 25px;
-            font-size: 18px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            margin: 5px;
-            font-weight: bold;
+            padding: 12px 25px; font-size: 18px; border: none;
+            border-radius: 50px; cursor: pointer; transition: 0.2s;
+            font-weight: bold; margin: 5px;
         }
-
-        .btn-start { background: #2ecc71; color: white; width: 100%; margin-top: 20px; }
-        .btn-start:hover { background: #27ae60; transform: scale(1.05); }
+        .btn-start { background: #2ecc71; color: white; width: 100%; margin-top: 15px; }
         .btn-rules { background: #3498db; color: white; }
 
-        /* Game Screen */
-        #game-screen {
-            background-image: url('bg.png');
+        /* KHU VỰC CÂU HỎI */
+        .question-box {
+            background: var(--bg-overlay);
+            padding: 20px; border-radius: 15px;
+            width: 85%; max-width: 700px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center; z-index: 10; margin-top: 20px;
         }
 
+        /* FIX LỖI ẢNH NHÂN VẬT BỊ MỜ */
         .rope-area {
             position: relative;
-            width: 100%;
-            height: 300px;
-            margin-top: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100%; flex-grow: 1;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            z-index: 5; /* Đảm bảo nằm dưới question-box nhưng trên nền */
         }
 
         .tug-container {
             position: relative;
-            width: 800px;
-            height: 200px;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 1000px;
+            opacity: 1 !important; /* Đảm bảo không bị mờ */
+            filter: none !important;
         }
 
-        .team-img {
-            width: 800px; /* Chứa cả 2 đội và dây */
-            height: auto;
+        .team-img { 
+            height: 280px; 
+            width: auto; 
+            opacity: 1 !important; 
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); /* Giúp nhân vật nổi bật hơn */
         }
 
         .center-mark {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background: rgba(255, 255, 0, 0.5);
-            border-left: 2px dashed red;
-            transform: translateX(-50%);
-            z-index: 5;
+            position: absolute; left: 50%; top: 0; width: 4px; height: 100%;
+            background: rgba(255, 255, 0, 0.6); border-left: 2px dashed red;
+            transform: translateX(-50%); z-index: 4;
         }
 
-        .question-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 700px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            text-align: center;
-            z-index: 10;
+        #timer-display {
+            font-size: 35px; font-weight: bold; color: #e74c3c;
+            background: white; padding: 5px 25px; border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-top: 10px;
         }
-
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 10px;
-        }
-
-        .answer-area {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 500px;
-            position: relative;
-        }
-
-        /* Result Screen */
-        #result-screen {
-            background: rgba(0,0,0,0.85);
-            color: white;
-        }
-
-        .winner-text { font-size: 48px; color: var(--primary-color); margin-bottom: 20px; }
-        .penalty-box { font-style: italic; background: #444; padding: 15px; border-radius: 10px; margin: 20px; }
 
         .explanation {
-            color: #e67e22;
-            font-weight: bold;
-            margin-top: 10px;
-            display: none;
+            margin-top: 10px; padding: 10px; border-radius: 8px;
+            background: #fff3cd; color: #856404; display: none; font-weight: bold;
         }
 
-        .volume-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* ĐẾM NGƯỢC */
+        #countdown-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); color: white;
+            display: none; align-items: center; justify-content: center;
+            font-size: 150px; font-weight: bold; z-index: 1000;
         }
     </style>
 </head>
 <body>
 
+    <div id="countdown-overlay">3</div>
+
+    <!-- ÂM THANH -->
+    <audio id="bg-music" src="audio.mp3" loop></audio>
+    <audio id="sound-correct" src="dung.mp3"></audio>
+    <audio id="sound-wrong" src="sai.mp3"></audio>
+
     <!-- MÀN HÌNH CÀI ĐẶT -->
     <div id="setup-screen" class="screen">
         <div class="container">
-            <h1>PƠLONG DUI TƠLEI</h1>
-            <p>Trò chơi Kéo co Toán học</p>
-
+            <h1 style="color: var(--secondary-color);">PƠLONG DUI TƠLEI</h1>
+            
             <div class="setting-group">
                 <label>Thời gian mỗi câu (giây):</label>
-                <input type="number" id="time-per-question" value="15" min="5">
+                <input type="number" id="time-per-question" value="15">
+            </div>
+
+            <div class="setting-group">
+                <label>Chọn Lớp:</label>
+                <select id="grade-select" onchange="updateTopics()">
+                    <option value="1">Lớp 1</option>
+                    <option value="2">Lớp 2</option>
+                    <option value="3">Lớp 3</option>
+                    <option value="4">Lớp 4</option>
+                    <option value="5">Lớp 5</option>
+                </select>
+            </div>
+
+            <div class="setting-group">
+                <label>Chọn Chủ đề:</label>
+                <select id="topic-select"></select>
             </div>
 
             <div class="setting-group">
                 <label>Chế độ chơi:</label>
                 <select id="play-mode">
-                    <option value="2p">Chế độ 2 người (Đội A vs Đội B)</option>
-                    <option value="1p">Chế độ 1 người (Đấu với Máy)</option>
+                    <option value="2p">2 Người chơi</option>
+                    <option value="1p">Đấu với Máy</option>
                 </select>
             </div>
 
             <div class="setting-group">
                 <label>Nguồn câu hỏi:</label>
                 <select id="q-source" onchange="toggleQSource()">
-                    <option value="ai">AI Tự động tạo câu hỏi</option>
-                    <option value="manual">Tự nhập câu hỏi</option>
+                    <option value="ai">AI Tự tạo câu hỏi</option>
+                    <option value="manual">Tự nhập tay</option>
                 </select>
             </div>
 
-            <div id="ai-settings">
-                <div class="setting-group">
-                    <label>Chọn Lớp:</label>
-                    <select id="grade-select">
-                        <option value="1">Lớp 1</option>
-                        <option value="2">Lớp 2</option>
-                        <option value="3">Lớp 3</option>
-                        <option value="4">Lớp 4</option>
-                        <option value="5">Lớp 5</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <label>Số lượng câu hỏi:</label>
-                    <input type="number" id="q-count" value="10" min="1">
-                </div>
-            </div>
-
             <div id="manual-settings" style="display:none;">
-                <div class="setting-group">
-                    <label>Nhập câu hỏi (Câu hỏi|Đáp án):</label>
-                    <textarea id="manual-data" rows="5" placeholder="Ví dụ:&#10;2 + 3|5&#10;10 - 4|6"></textarea>
-                </div>
+                <textarea id="manual-data" rows="3" placeholder="Câu hỏi|Đáp án"></textarea>
             </div>
 
-            <button class="btn btn-rules" onclick="showRules()">Luật chơi</button>
+            <button class="btn btn-rules" onclick="showRules()">LUẬT CHƠI</button>
             <button class="btn btn-start" onclick="startGame()">BẮT ĐẦU CHƠI</button>
         </div>
     </div>
 
     <!-- MÀN HÌNH CHƠI -->
     <div id="game-screen" class="screen">
-        <div class="timer" id="timer-display">15</div>
+        <div id="timer-display">15</div>
         
         <div class="question-box">
-            <div id="turn-display" style="font-weight: bold; margin-bottom: 5px;">Lượt của: Đội A</div>
-            <h2 id="question-text">Đang tải câu hỏi...</h2>
-            <div class="answer-area">
-                <input type="text" id="answer-input" placeholder="Nhập đáp án..." onkeyup="if(event.key==='Enter') submitAnswer()">
-                <button class="btn btn-rules" onclick="submitAnswer()">Gửi</button>
+            <div id="turn-display" style="font-weight: bold; color: var(--secondary-color);">Lượt của: Đội A</div>
+            <h2 id="question-text">Đang tải...</h2>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <input type="text" id="answer-input" placeholder="Kết quả..." style="width: 150px;" onkeyup="if(event.key==='Enter') submitAnswer()">
+                <button class="btn btn-rules" onclick="submitAnswer()">GỬI</button>
             </div>
             <div id="explanation-text" class="explanation"></div>
         </div>
@@ -268,294 +203,171 @@
                 <img src="team.png" alt="Teams" class="team-img">
             </div>
         </div>
-
-        <div class="volume-control">
-            <span>🔊</span>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="updateVolume()">
-        </div>
     </div>
 
     <!-- MÀN HÌNH KẾT QUẢ -->
-    <div id="result-screen" class="screen">
-        <div class="winner-text" id="winner-display">ĐỘI A THẮNG!</div>
-        <div class="penalty-box">
-            <strong>Hình phạt vui:</strong> <span id="penalty-text">...</span>
-        </div>
-        <button class="btn btn-start" onclick="location.reload()">Chơi lại từ đầu</button>
-        <button class="btn btn-rules" onclick="resetToMenu()">Về màn hình chính</button>
-    </div>
-
-    <!-- MODAL LUẬT CHƠI -->
-    <div id="modal-rules" class="modal">
-        <div class="modal-content">
-            <h2>Luật chơi</h2>
-            <ul style="text-align: left; line-height: 1.6;">
-                <li>Hai đội (hoặc bạn và máy) lần lượt trả lời câu hỏi.</li>
-                <li><strong>Trả lời đúng:</strong> Kéo dây về phía mình 1 đoạn.</li>
-                <li><strong>Trả lời sai:</strong> Lượt trả lời chuyển sang đối phương.</li>
-                <li>Nếu cả hai đều sai hoặc hết giờ: Dây đứng yên.</li>
-                <li>Đội nào kéo vạch trung tâm về phía mình quá mức quy định sẽ thắng!</li>
-            </ul>
-            <button class="btn btn-start" onclick="closeRules()">Đã hiểu</button>
+    <div id="result-screen" class="screen" style="background: rgba(0,0,0,0.9);">
+        <h1 id="winner-display" style="font-size: 50px; color: gold;">ĐỘI A THẮNG!</h1>
+        <div class="container" style="max-width: 400px;">
+            <p>Hình phạt: <span id="penalty-text" style="color: red; font-weight: bold;">...</span></p>
+            <button class="btn btn-start" onclick="location.reload()">CHƠI LẠI</button>
         </div>
     </div>
-
-    <!-- ÂM THANH -->
-    <audio id="bg-music" src="audio.mp3" loop></audio>
 
     <script>
-        // --- DATA & CONFIG ---
-        let questions = [];
-        let currentQIndex = 0;
-        let pullScore = 0; // -5: Đội A thắng, 5: Đội B thắng
-        let timer;
-        let timeLeft;
-        let currentTurn = 'A'; // 'A' hoặc 'B'
-        let gameActive = false;
-        let config = {};
-
-        const penalties = [
-            "Hát một bài hát thiếu nhi.",
-            "Nhảy lò cò quanh phòng 3 vòng.",
-            "Làm mặt xấu trong 10 giây.",
-            "Kể một câu chuyện cười ngắn.",
-            "Thực hiện 5 cái thụt dầu.",
-            "Đứng im như tượng trong 20 giây."
-        ];
-
-        // --- HÀM KHỞI TẠO ---
-        window.onload = () => {
-            const savedData = localStorage.getItem('tug_manual_questions');
-            if (savedData) document.getElementById('manual-data').value = savedData;
+        // --- DỮ LIỆU CHỦ ĐỀ ---
+        const topicsData = {
+            "1": ["Số đến 100", "Phép cộng/trừ (không nhớ)", "Hình học cơ bản", "Đo lường (cm)"],
+            "2": ["Cộng/trừ có nhớ", "Bảng nhân/chia 2 và 5", "Xem giờ", "Đơn vị đo", "Hình học & Chu vi"],
+            "3": ["Số đến 100.000", "Nhân/chia đa chữ số", "Bảng nhân/chia 3-9", "Góc & Chu vi/Diện tích", "Phép chia có dư"],
+            "4": ["Số tự nhiên lớn", "Dấu hiệu chia hết", "Phân số", "Góc nhọn/tù/bẹt", "Diện tích hình thoi/bình hành", "Trung bình cộng"],
+            "5": ["Số thập phân & Hỗn số", "Tỉ số phần trăm", "Vận tốc/Quãng đường/Thời gian", "Hình học không gian", "Giải toán chuyển động", "Lãi suất"]
         };
 
-        function toggleQSource() {
-            const source = document.getElementById('q-source').value;
-            document.getElementById('ai-settings').style.display = source === 'ai' ? 'block' : 'none';
-            document.getElementById('manual-settings').style.display = source === 'manual' ? 'block' : 'none';
+        function updateTopics() {
+            const grade = document.getElementById('grade-select').value;
+            const topicSelect = document.getElementById('topic-select');
+            topicSelect.innerHTML = "";
+            topicsData[grade].forEach(t => {
+                let opt = document.createElement('option');
+                opt.value = t; opt.innerHTML = t;
+                topicSelect.appendChild(opt);
+            });
         }
 
-        function showRules() { document.getElementById('modal-rules').style.display = 'flex'; }
-        function closeRules() { document.getElementById('modal-rules').style.display = 'none'; }
-
-        // --- LOGIC TẠO CÂU HỎI (AI MOCKUP) ---
-        function generateAIQuestions(grade, count) {
+        // --- AI GENERATE QUESTIONS ---
+        function generateAIQuestions(grade, topic, count) {
             let qSet = [];
             for (let i = 0; i < count; i++) {
                 let q, a, e;
-                if (grade == 1) {
-                    let n1 = Math.floor(Math.random() * 50);
-                    let n2 = Math.floor(Math.random() * 40);
-                    q = `${n1} + ${n2}`; a = n1 + n2; e = "Cộng hàng đơn vị trước rồi đến hàng chục.";
-                } else if (grade == 2) {
-                    let tables = [2, 5];
-                    let t = tables[Math.floor(Math.random() * 2)];
-                    let n = Math.floor(Math.random() * 10) + 1;
-                    q = `${t} x ${n}`; a = t * n; e = `Bảng nhân ${t}.`;
-                } else if (grade == 3) {
-                    let n1 = Math.floor(Math.random() * 100);
-                    let n2 = Math.floor(Math.random() * 9) + 1;
-                    q = `${n1} x ${n2}`; a = n1 * n2; e = "Nhân lần lượt từ phải sang trái.";
-                } else if (grade == 4) {
-                    let n1 = (Math.floor(Math.random() * 9) + 1) * 10;
-                    let n2 = Math.floor(Math.random() * 9) + 1;
-                    q = `Trung bình cộng của ${n1} và ${n2 * 10}`; a = (n1 + n2 * 10) / 2; e = "Tổng hai số chia cho 2.";
+                if (grade == "1") {
+                    if (topic.includes("Số")) { q = `Số đứng trước số ${Math.floor(Math.random()*90)+10} là?`; a = parseInt(q.match(/\d+/))-1; e = "Số đứng trước là số trừ đi 1."; }
+                    else { let n1 = Math.floor(Math.random()*50); let n2 = Math.floor(Math.random()*40); q = `${n1} + ${n2} = ?`; a = n1+n2; e = "Cộng đơn vị theo hàng."; }
+                } else if (grade == "2") {
+                    if (topic.includes("nhân")) { let n1 = [2,5][Math.floor(Math.random()*2)]; let n2 = Math.floor(Math.random()*9)+1; q = `${n1} x ${n2} = ?`; a = n1*n2; e = `Bảng nhân ${n1}.`; }
+                    else { q = `Cộng có nhớ: 28 + 35 = ?`; a = 63; e = "8+5=13 viết 3 nhớ 1."; }
+                } else if (grade == "3") {
+                    let n1 = Math.floor(Math.random()*100); let n2 = Math.floor(Math.random()*8)+2; q = `${n1} x ${n2} = ?`; a = n1*n2; e = "Nhân từ phải qua trái.";
+                } else if (grade == "4") {
+                    if (topic.includes("chia hết")) { let n = [120, 135, 246, 555][Math.floor(Math.random()*4)]; q = `Số ${n} có chia hết cho 5 không? (Có/Không)`; a = (n%5==0?"Có":"Không"); e = "Số tận cùng là 0 hoặc 5 thì chia hết cho 5."; }
+                    else { q = "Trung bình cộng của 20 và 40 là?"; a = 30; e = "(20 + 40) chia 2 = 30."; }
                 } else {
-                    let n1 = (Math.random() * 10).toFixed(1);
-                    let n2 = (Math.random() * 10).toFixed(1);
-                    q = `${n1} + ${n2}`; a = (parseFloat(n1) + parseFloat(n2)).toFixed(1); e = "Chú ý dấu phẩy thẳng hàng.";
+                    if (topic.includes("Vận tốc")) { q = "Quãng đường 100km, thời gian 2h. Vận tốc là? (km/h)"; a = 50; e = "Vận tốc = Quãng đường : Thời gian."; }
+                    else { q = "0.5 x 10 = ?"; a = 5; e = "Dời dấu phẩy sang phải 1 chữ số."; }
                 }
                 qSet.push({ q, a: a.toString(), e });
             }
             return qSet;
         }
 
-        // --- GAME CONTROL ---
-        function startGame() {
-            config = {
-                time: parseInt(document.getElementById('time-per-question').value),
-                mode: document.getElementById('play-mode').value,
-                source: document.getElementById('q-source').value,
-                grade: document.getElementById('grade-select').value,
-                count: parseInt(document.getElementById('q-count').value)
-            };
+        // --- LOGIC GAME ---
+        let questions = [];
+        let currentQIndex = 0;
+        let pullScore = 0; 
+        let timer;
+        let timeLeft;
+        let currentTurn = 'A';
+        let gameActive = false;
 
-            if (config.source === 'ai') {
-                questions = generateAIQuestions(config.grade, config.count);
+        function startGame() {
+            const grade = document.getElementById('grade-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const source = document.getElementById('q-source').value;
+
+            if (source === 'ai') {
+                questions = generateAIQuestions(grade, topic, 10);
             } else {
                 const text = document.getElementById('manual-data').value;
-                localStorage.setItem('tug_manual_questions', text);
-                questions = text.split('\n').filter(line => line.includes('|')).map(line => {
-                    let [q, a] = line.split('|');
-                    return { q: q.trim(), a: a.trim(), e: "Đáp án đúng là " + a };
-                });
+                if (!text.trim()) { alert("Hãy nhập câu hỏi!"); return; }
+                questions = text.split('\n').map(l => ({ q: l.split('|')[0], a: l.split('|')[1], e: "Đáp án là: " + l.split('|')[1] }));
             }
 
-            if (questions.length === 0) return alert("Vui lòng nhập câu hỏi!");
-
-            // Reset game state
-            currentQIndex = 0;
-            pullScore = 0;
-            currentTurn = 'A';
-            gameActive = true;
-
-            // UI
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
             document.getElementById('bg-music').play();
-            
-            updateTugUI();
-            nextQuestion();
+
+            // Đếm ngược
+            let cdOverlay = document.getElementById('countdown-overlay');
+            let counts = ["3", "2", "1", "BẮT ĐẦU!"];
+            let i = 0;
+            cdOverlay.style.display = 'flex';
+            cdOverlay.innerText = counts[0];
+            let cdInterval = setInterval(() => {
+                i++;
+                if (i < counts.length) cdOverlay.innerText = counts[i];
+                else { clearInterval(cdInterval); cdOverlay.style.display = 'none'; gameActive = true; nextQuestion(); }
+            }, 1000);
         }
 
         function nextQuestion() {
-            if (currentQIndex >= questions.length || Math.abs(pullScore) >= 5) {
-                endGame();
-                return;
-            }
-
+            if (currentQIndex >= questions.length || Math.abs(pullScore) >= 5) { endGame(); return; }
             document.getElementById('explanation-text').style.display = 'none';
             document.getElementById('answer-input').value = '';
             document.getElementById('answer-input').focus();
+            document.getElementById('question-text').innerText = questions[currentQIndex].q;
+            document.getElementById('turn-display').innerText = `Lượt: Đội ${currentTurn}`;
             
-            let q = questions[currentQIndex];
-            document.getElementById('question-text').innerText = q.q;
-            document.getElementById('turn-display').innerText = `Lượt của: Đội ${currentTurn} ${config.mode === '1p' && currentTurn === 'B' ? '(Máy)' : ''}`;
-            
-            timeLeft = config.time;
-            updateTimer();
-            
+            timeLeft = parseInt(document.getElementById('time-per-question').value);
+            startTimer();
+        }
+
+        function startTimer() {
             clearInterval(timer);
+            document.getElementById('timer-display').innerText = timeLeft;
             timer = setInterval(() => {
                 timeLeft--;
-                updateTimer();
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    handleWrong();
-                }
+                document.getElementById('timer-display').innerText = timeLeft;
+                if (timeLeft <= 0) { clearInterval(timer); handleWrong(); }
             }, 1000);
-
-            // Nếu là lượt của Máy
-            if (config.mode === '1p' && currentTurn === 'B' && gameActive) {
-                setTimeout(aiLogic, 2000);
-            }
-        }
-
-        function aiLogic() {
-            if (!gameActive) return;
-            const isCorrect = Math.random() < 0.7; // 70% đúng
-            if (isCorrect) {
-                document.getElementById('answer-input').value = questions[currentQIndex].a;
-                submitAnswer();
-            } else {
-                handleWrong();
-            }
-        }
-
-        function updateTimer() {
-            document.getElementById('timer-display').innerText = timeLeft;
         }
 
         function submitAnswer() {
             if (!gameActive) return;
-            let userAns = document.getElementById('answer-input').value.trim();
-            let correctAns = questions[currentQIndex].a;
+            const userAns = document.getElementById('answer-input').value.trim();
+            if (!userAns) { alert("Bạn chưa nhập đáp án!"); return; }
 
-            if (userAns.toLowerCase() === correctAns.toLowerCase()) {
-                handleCorrect();
-            } else {
-                handleWrong();
-            }
+            if (userAns.toLowerCase() === questions[currentQIndex].a.toLowerCase()) handleCorrect();
+            else handleWrong();
         }
 
         function handleCorrect() {
-            clearInterval(timer);
-            playSound(true);
-            
-            if (currentTurn === 'A') pullScore--; 
-            else pullScore++;
-
+            gameActive = false; clearInterval(timer);
+            playEffect('correct');
+            if (currentTurn === 'A') pullScore--; else pullScore++;
             updateTugUI();
-            currentQIndex++;
-            currentTurn = (currentTurn === 'A') ? 'B' : 'A';
-            
-            setTimeout(nextQuestion, 1000);
+            setTimeout(() => { currentQIndex++; currentTurn = currentTurn === 'A'?'B':'A'; gameActive = true; nextQuestion(); }, 1200);
         }
 
         function handleWrong() {
-            clearInterval(timer);
-            playSound(false);
-            
-            let q = questions[currentQIndex];
-            let exp = document.getElementById('explanation-text');
-            exp.innerText = `Sai rồi! Đáp án là: ${q.a}. ${q.e}`;
+            gameActive = false; clearInterval(timer);
+            playEffect('wrong');
+            const exp = document.getElementById('explanation-text');
+            exp.innerHTML = `SAI RỒI! Đáp án: ${questions[currentQIndex].a}<br>${questions[currentQIndex].e}`;
             exp.style.display = 'block';
-
-            // Đổi lượt mà không tăng index câu hỏi để đội kia có cơ hội
-            currentTurn = (currentTurn === 'A') ? 'B' : 'A';
-            
-            // Nếu cả 2 đều sai ở cùng 1 câu (logic đơn giản: chuyển câu sau mỗi 2 lần sai)
-            // Để đơn giản cho học sinh: Sai là mất lượt, chuyển câu luôn
-            currentQIndex++;
-            setTimeout(nextQuestion, 2500);
+            setTimeout(() => { currentQIndex++; currentTurn = currentTurn === 'A'?'B':'A'; gameActive = true; nextQuestion(); }, 3000);
         }
 
         function updateTugUI() {
-            const offset = pullScore * 40; // Mỗi điểm kéo 40px
-            document.getElementById('tug-group').style.transform = `translateX(${-offset}px)`;
+            document.getElementById('tug-group').style.transform = `translateX(${-pullScore * 60}px)`;
+        }
+
+        function playEffect(type) {
+            const s = document.getElementById(type === 'correct' ? 'sound-correct' : 'sound-wrong');
+            s.currentTime = 0; s.play();
         }
 
         function endGame() {
-            gameActive = false;
-            clearInterval(timer);
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('result-screen').style.display = 'flex';
-
-            let winner = "";
-            if (pullScore < 0) winner = "ĐỘI A THẮNG!";
-            else if (pullScore > 0) winner = "ĐỘI B THẮNG!";
-            else winner = "HÒA NHAU!";
-
-            document.getElementById('winner-display').innerText = winner;
-            document.getElementById('penalty-text').innerText = penalties[Math.floor(Math.random() * penalties.length)];
+            document.getElementById('winner-display').innerText = pullScore < 0 ? "ĐỘI A THẮNG!" : "ĐỘI B THẮNG!";
         }
 
-        function resetToMenu() {
-            location.reload();
+        function toggleQSource() {
+            document.getElementById('manual-settings').style.display = document.getElementById('q-source').value === 'manual' ? 'block' : 'none';
         }
 
-        function updateVolume() {
-            const v = document.getElementById('volume-slider').value;
-            document.getElementById('bg-music').volume = v;
-        }
-
-        // --- WEB AUDIO API FOR EFFECTS ---
-        function playSound(isCorrect) {
-            const context = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = context.createOscillator();
-            const gain = context.createGain();
-            
-            osc.connect(gain);
-            gain.connect(context.destination);
-
-            if (isCorrect) {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(500, context.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1000, context.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.1, context.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
-                osc.start();
-                osc.stop(context.currentTime + 0.3);
-            } else {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, context.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(50, context.currentTime + 0.3);
-                gain.gain.setValueAtTime(0.1, context.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.4);
-                osc.start();
-                osc.stop(context.currentTime + 0.4);
-            }
-        }
+        // Khởi tạo chủ đề lớp 1 khi load
+        window.onload = updateTopics;
     </script>
 </body>
 </html>
