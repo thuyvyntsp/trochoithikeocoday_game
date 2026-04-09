@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thi kéo co dây - Pơlong dui tơlei (Phiên bản Lớp học)</title>
+    <title>Thi kéo co dây - Pơlong dui tơlei (Ultimate Version)</title>
     <style>
         :root {
             --primary-color: #f1c40f;
@@ -48,7 +48,31 @@
         .btn-history { background: #9b59b6; color: white; width: 100%; }
         .btn-pause { background: #f39c12; color: white; padding: 5px 15px; font-size: 14px; margin-left: 10px; }
 
-        /* --- KHU VỰC CƯỚP QUYỀN (STEAL) --- */
+        /* Nút Info "i" */
+        #info-btn {
+            width: 35px; height: 35px; border-radius: 50%; background: white;
+            color: #333; font-weight: bold; font-size: 20px; font-style: italic;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.2s; margin-left: 10px;
+            pointer-events: auto; /* Cho phép bấm */
+        }
+        #info-btn:hover { transform: scale(1.1); background: var(--primary-color); }
+
+        /* --- THỐNG KÊ --- */
+        .stats-bar {
+            position: absolute; top: 10px; width: 95%; display: flex;
+            justify-content: space-between; align-items: center; z-index: 20;
+            pointer-events: none; /* Tránh cản trở click game phía dưới */
+        }
+        .stats-bar > * { pointer-events: auto; } /* Bật lại click cho con */
+
+        .stat-card {
+            background: rgba(255,255,255,0.9); padding: 8px 15px; border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold; font-size: 14px;
+        }
+
+        /* --- CƯỚP QUYỀN (STEAL) --- */
         .buzz-area { display: none; gap: 20px; margin: 15px 0; justify-content: center; }
         .btn-buzz {
             width: 220px; height: 90px; font-size: 22px; border-radius: 15px;
@@ -60,16 +84,6 @@
 
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-        /* --- THỐNG KÊ --- */
-        .stats-bar {
-            position: absolute; top: 10px; width: 95%; display: flex;
-            justify-content: space-between; align-items: center; z-index: 20;
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.9); padding: 8px 15px; border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold; font-size: 14px;
-        }
-
         /* --- BỐ CỤC NHÂN VẬT (TO VÀ NẰM DƯỚI) --- */
         .question-box {
             background: var(--bg-overlay); padding: 20px; border-radius: 15px;
@@ -78,7 +92,7 @@
         }
 
         .rope-area {
-            position: absolute; bottom: 0; width: 80%; height: 45vh;
+            position: absolute; bottom: 0; width: 100%; height: 45vh;
             display: flex; justify-content: center; align-items: flex-end;
             overflow: hidden; z-index: 5;
         }
@@ -88,7 +102,7 @@
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 1200px;
         }
 
-        .team-img { width: 600px; height: auto; object-fit: contain; transform: translateY(30px); opacity: 1 !important; }
+        .team-img { width: 100%; height: auto; object-fit: contain; transform: translateY(30px); opacity: 1 !important; }
 
         .center-mark { position: absolute; left: 50%; bottom: 0; width: 4px; height: 100%; background: red; z-index: 4; }
 
@@ -97,20 +111,60 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); color: white; z-index: 1000;
             align-items: center; justify-content: center; flex-direction: column; text-align: center;
+            animation: fadeIn 0.3s forwards;
         }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .explanation {
             margin-top: 10px; padding: 10px; border-radius: 8px;
             background: #fff3cd; color: #856404; display: none; font-weight: bold;
         }
+
+        /* Modal Info & History */
+        .info-container {
+            background: white; color: #333; text-align: left; padding: 30px;
+            border-radius: 20px; max-width: 700px; width: 90%; max-height: 80vh;
+            overflow-y: auto; line-height: 1.6;
+        }
+        .info-container h2 { color: var(--secondary-color); text-align: center; margin-top: 0; }
+        .info-container h3 { color: #34495e; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div id="countdown-overlay" class="overlay" style="font-size: 150px;">3</div>
+    
     <div id="pause-overlay" class="overlay">
         <h1>ĐÃ TẠM DỪNG</h1>
         <button class="btn btn-start" style="width: 200px;" onclick="togglePause()">TIẾP TỤC</button>
+    </div>
+
+    <!-- POPUP THÔNG TIN "i" -->
+    <div id="info-modal" class="overlay">
+        <div class="info-container">
+            <h2>KÉO CO DÂY: NÉT ĐẸP THỂ THAO CỘNG ĐỒNG</h2>
+            <p>Trong kho tàng trò chơi dân gian, Kéo co dây (Pơlong dui tơlei) nổi bật như một môn thể thao vừa mang tính giải trí, vừa thể hiện sức mạnh tập thể. Trò chơi thường được tổ chức vào ban ngày tại những không gian rộng rãi, thoáng đãng như sân làng, sân nhà rông hay những cánh đồng cỏ.</p>
+            
+            <h3>Sự chuẩn bị công phu</h3>
+            <p>Điểm độc đáo của trò chơi nằm ở chiếc dây thừng mang tên tơgrăn. Đây không phải là loại dây thông thường mà được bện từ vỏ cây hơdrong – một loại cây rừng mọc thẳng, cho lớp vỏ trong rất dẻo và chắc. Sợi dây được bện to bằng ngón tay cái, ở chính giữa có buộc một miếng vải nhỏ để làm dấu mốc trên vạch ranh giới.</p>
+            
+            <h3>Luật chơi và tinh thần đồng đội</h3>
+            <p>Trò chơi dành cho thanh thiếu niên với số lượng từ 10 đến 20 người, chia làm hai đội cân bằng về số lượng và sức mạnh. Khi trọng tài phát lệnh, cả hai nhóm sẽ nắm chặt sợi dây, dùng toàn bộ sức lực để kéo miếng vải đánh dấu về phía đội mình. Mỗi thành viên không chỉ cần sức khỏe cá nhân mà còn phải phối hợp nhịp nhàng, "đồng tâm hiệp lực" để tạo nên sức mạnh tổng hợp nhằm kéo ngã đối phương.</p>
+            
+            <h3>Giá trị tinh thần</h3>
+            <p>Dù phần thắng thuộc về đội nào, kết thúc trò chơi luôn là những tràng pháo tay tán thưởng và niềm vui rạng rỡ của tất cả mọi người. Kéo co dây không đơn thuần là một cuộc thi tài mà còn là bài học quý giá về:</p>
+            <ul>
+                <li><b>Sức khỏe:</b> Rèn luyện sự dẻo dai và bền bỉ.</li>
+                <li><b>Kỹ năng:</b> Tập luyện khả năng quan sát và phản xạ.</li>
+                <li><b>Gắn kết:</b> Thắt chặt tinh thần hợp tác và đoàn kết trong cộng đồng.</li>
+            </ul>
+            <p>Qua đó, trò chơi góp phần gìn giữ những giá trị văn hóa truyền thống tốt đẹp, tạo nên một sân chơi lành mạnh và đầy gắn kết cho thế hệ trẻ.</p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-start" style="width: 150px;" onclick="toggleInfo()">ĐÓNG</button>
+            </div>
+        </div>
     </div>
 
     <!-- MÀN HÌNH CÀI ĐẶT -->
@@ -138,7 +192,7 @@
             </div>
 
             <div id="manual-settings" style="display:none;">
-                <textarea id="manual-data" rows="4" placeholder="Câu hỏi|Đáp án (Ví dụ: 2+3|5)"></textarea>
+                <textarea id="manual-data" rows="4" placeholder="Câu hỏi|Đáp án"></textarea>
             </div>
 
             <div class="setting-group">
@@ -166,7 +220,10 @@
                 <div id="timer-display" style="font-size: 30px; font-weight: bold; background: white; padding: 5px 20px; border-radius: 20px;">15</div>
                 <button class="btn btn-pause" onclick="togglePause()">Pause</button>
             </div>
-            <div class="stat-card" style="color: var(--team-b-color);">Đội B: <span id="s-b-c">0</span> Đ | <span id="s-b-w">0</span> S</div>
+            <div style="display: flex; align-items: center;">
+                <div class="stat-card" style="color: var(--team-b-color);">Đội B: <span id="s-b-c">0</span> Đ | <span id="s-b-w">0</span> S</div>
+                <div id="info-btn" onclick="toggleInfo()">i</div>
+            </div>
         </div>
         
         <div class="question-box">
@@ -205,24 +262,20 @@
         </div>
     </div>
 
-    <!-- ÂM THANH -->
     <audio id="sound-correct" src="dung.mp3"></audio>
     <audio id="sound-wrong" src="sai.mp3"></audio>
     <audio id="bg-music" src="audio.mp3" loop></audio>
 
     <script>
         const topicsData = {
-            "1": ["Số đến 100", "Phép cộng phạm vi 100", "Hình học cơ bản", "Đo lường cm"],
-            "2": ["Cộng trừ có nhớ", "Bảng nhân 2, 5", "Xem giờ", "Chu vi hình học"],
-            "3": ["Bảng nhân 3-9", "Diện tích/Chu vi", "Chia có dư"],
-            "4": ["Dấu hiệu chia hết", "Phân số", "Trung bình cộng", "Diện tích hình thoi"],
-            "5": ["Số thập phân", "Tỉ số phần trăm", "Vận tốc/Quãng đường", "Hình khối"]
+            "1": ["Số đến 100", "Phép cộng phạm vi 100", "Hình học", "Đo lường"],
+            "2": ["Cộng trừ có nhớ", "Bảng nhân 2, 5", "Xem giờ", "Chu vi"],
+            "3": ["Bảng nhân 3-9", "Diện tích", "Chia có dư"],
+            "4": ["Phân số", "Dấu hiệu chia hết", "Trung bình cộng"],
+            "5": ["Số thập phân", "Tỉ số phần trăm", "Vận tốc"]
         };
 
-        let stats = { 
-            A: { c: 0, w: 0, wQs: [] }, 
-            B: { c: 0, w: 0, wQs: [] } 
-        };
+        let stats = { A: { c: 0, w: 0, wQs: [] }, B: { c: 0, w: 0, wQs: [] } };
         let questions = [], currentQIndex = 0, pullScore = 0, timer, timeLeft, gameActive = false;
         let isPaused = false, answeringTeam = null, stealMode = false, stealTimer = null;
 
@@ -239,15 +292,26 @@
             document.getElementById('manual-settings').style.display = isAI ? 'none' : 'block';
         }
 
+        function toggleInfo() {
+            const modal = document.getElementById('info-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                if (gameActive) isPaused = false; // Tiếp tục game khi đóng
+            } else {
+                modal.style.display = 'flex';
+                if (gameActive) isPaused = true; // Tạm dừng game khi mở
+            }
+        }
+
         function startGame() {
             const source = document.getElementById('q-source').value;
             if (source === 'manual') {
                 const text = document.getElementById('manual-data').value.trim();
                 if (!text) return alert("Chưa nhập câu hỏi!");
                 questions = text.split('\n').filter(l => l.includes('|')).map(l => ({ q: l.split('|')[0].trim(), a: l.split('|')[1].trim() }));
-                localStorage.setItem('tug_manual_cache', text);
             } else {
-                questions = generateAIQuestions(document.getElementById('grade-select').value, document.getElementById('topic-select').value);
+                questions = []; 
+                for(let i=0; i<10; i++) { questions.push({ q: `Câu ${i+1}: ${Math.floor(Math.random()*20)} + ${Math.floor(Math.random()*20)} = ?`, a: "40" }); }
             }
 
             stats = { A: { c: 0, w: 0, wQs: [] }, B: { c: 0, w: 0, wQs: [] } };
@@ -256,15 +320,6 @@
             document.getElementById('game-screen').style.display = 'flex';
             document.getElementById('bg-music').play();
             runCountdown();
-        }
-
-        function generateAIQuestions(grade, topic) {
-            let qSet = [];
-            for(let i=0; i<10; i++) {
-                let n1 = Math.floor(Math.random()*50), n2 = Math.floor(Math.random()*50);
-                qSet.push({ q: `Câu ${i+1} (${topic}): ${n1} + ${n2} = ?`, a: (n1+n2).toString() });
-            }
-            return qSet;
         }
 
         function runCountdown() {
@@ -280,33 +335,16 @@
 
         function nextQuestion() {
             if (currentQIndex >= questions.length || Math.abs(pullScore) >= 5) return endGame();
-            
-            stealMode = false;
-            clearTimeout(stealTimer);
-            
-            const mode = document.getElementById('play-mode').value;
-            if (mode === '2p') {
-                answeringTeam = (currentQIndex % 2 === 0) ? 'A' : 'B';
-            } else {
-                answeringTeam = 'A'; // Người luôn là đội A
-            }
-            
+            stealMode = false; clearTimeout(stealTimer);
+            answeringTeam = (currentQIndex % 2 === 0) ? 'A' : 'B';
             document.getElementById('explanation-text').style.display = 'none';
             document.getElementById('answer-input').value = '';
             document.getElementById('question-text').innerText = questions[currentQIndex].q;
-            
             document.getElementById('buzz-area').style.display = 'none';
             document.getElementById('answer-section').style.display = 'flex';
-            document.getElementById('answering-display').innerText = (mode === '1p' && currentQIndex % 2 !== 0) ? "MÁY ĐANG TRẢ LỜI..." : `LƯỢT TRẢ LỜI: ĐỘI ${answeringTeam}`;
-            
-            if (mode === '1p' && currentQIndex % 2 !== 0) {
-                document.getElementById('answer-input').disabled = true;
-                setTimeout(aiLogic, 2000);
-            } else {
-                document.getElementById('answer-input').disabled = false;
-                document.getElementById('answer-input').focus();
-            }
-
+            document.getElementById('answering-display').innerText = `LƯỢT TRẢ LỜI: ĐỘI ${answeringTeam}`;
+            document.getElementById('answer-input').disabled = false;
+            document.getElementById('answer-input').focus();
             timeLeft = parseInt(document.getElementById('time-per-question').value);
             startTimer();
         }
@@ -321,16 +359,6 @@
                     if (timeLeft <= 0) { clearInterval(timer); handleWrong(); }
                 }
             }, 1000);
-        }
-
-        function aiLogic() {
-            if (!gameActive || isPaused) return;
-            answeringTeam = 'B';
-            const isCorrect = Math.random() < 0.7;
-            if (isCorrect) {
-                document.getElementById('answer-input').value = questions[currentQIndex].a;
-                submitAnswer();
-            } else handleWrong();
         }
 
         function submitAnswer() {
@@ -351,25 +379,18 @@
 
         function handleWrong() {
             clearInterval(timer); playEffect('wrong');
-            
             stats[answeringTeam].w++;
             stats[answeringTeam].wQs.push({ q: questions[currentQIndex].q, a: questions[currentQIndex].a });
             updateStatsUI();
-
             const mode = document.getElementById('play-mode').value;
-
             if (!stealMode && mode === '2p') {
                 stealMode = true;
                 const otherTeam = (answeringTeam === 'A') ? 'B' : 'A';
-                
                 document.getElementById('answer-section').style.display = 'none';
                 document.getElementById('buzz-area').style.display = 'flex';
-                
                 document.getElementById('btn-buzz-a').style.display = (otherTeam === 'A') ? 'block' : 'none';
                 document.getElementById('btn-buzz-b').style.display = (otherTeam === 'B') ? 'block' : 'none';
-                
                 document.getElementById('turn-info').innerText = `ĐỘI ${answeringTeam} SAI! ĐỘI ${otherTeam} CÓ 5 GIÂY ĐỂ CƯỚP QUYỀN!`;
-
                 stealTimer = setTimeout(() => { showFinalExplanation(); }, 5000);
             } else {
                 showFinalExplanation();
@@ -378,15 +399,12 @@
 
         function buzzIn(team) {
             clearTimeout(stealTimer);
-            answeringTeam = team;
-            playEffect('correct');
+            answeringTeam = team; playEffect('correct');
             document.getElementById('btn-buzz-' + team.toLowerCase()).classList.add('highlight-buzz');
-            
             setTimeout(() => {
                 document.getElementById('buzz-area').style.display = 'none';
                 document.getElementById('answer-section').style.display = 'flex';
                 document.getElementById('answering-display').innerText = `ĐỘI ${team} GIÀNH QUYỀN!`;
-                document.getElementById('answer-input').disabled = false;
                 document.getElementById('answer-input').focus();
             }, 500);
         }
@@ -398,7 +416,6 @@
             exp.style.display = 'block';
             document.getElementById('buzz-area').style.display = 'none';
             document.getElementById('answer-section').style.display = 'none';
-            
             setTimeout(() => { currentQIndex++; nextQuestion(); }, 3000);
         }
 
@@ -436,7 +453,7 @@
         function closeHistory() { document.getElementById('history-modal').style.display = 'none'; }
         function clearHistory() { if(confirm("Xóa toàn bộ lịch sử?")) { localStorage.removeItem('tug_history'); showHistory(); } }
         function showRules() {
-            alert("LUẬT CHƠI:\n1. Hai đội luân phiên trả lời câu hỏi.\n2. Nếu đội chính trả lời SAI, đội còn lại có 5 GIÂY để bấm nút CƯỚP QUYỀN.\n3. Ở chế độ 1 người, bạn đấu với máy (tỉ lệ máy đúng 70%).\n4. Kéo dây vượt vạch trung tâm để chiến thắng!");
+            alert("LUẬT CHƠI:\n1. Hai đội luân phiên trả lời câu hỏi.\n2. Nếu đội chính trả lời SAI, đội còn lại có 5 GIÂY để bấm nút CƯỚP QUYỀN.\n3. Kéo dây vượt vạch trung tâm để chiến thắng!");
         }
 
         window.onload = () => {
