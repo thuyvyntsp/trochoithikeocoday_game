@@ -341,7 +341,7 @@
     function move(dir) {
         // CHỈNH SỬA: Đội A đúng (dir=1) -> dây kéo về phía A (giảm position)
         // Đội B đúng (hoặc A sai/hết giờ) -> dây kéo về phía B (tăng position)
-        position -= dir * 10; 
+        position += dir * 10;
         teamImg.style.transform = `translateX(calc(-50% + ${position}%))`;
         
         if (position <= -50) endGame("Đội A thắng!"); // CHỈNH SỬA: Đội A thắng khi kéo đủ về phía mình
