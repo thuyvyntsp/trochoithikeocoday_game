@@ -434,7 +434,7 @@
         function handleCorrect() {
             clearInterval(timer); playEffect('correct');
             stats[answeringTeam].c++;
-            if (answeringTeam === 'A') pullScore--; else pullScore++;
+            if (answeringTeam === 'A') pullScore++; else pullScore--;
             updateStatsUI(); updateTugUI();
             setTimeout(() => { currentQIndex++; nextQuestion(); }, 1200);
         }
