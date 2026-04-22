@@ -287,44 +287,12 @@
 
     <script>
         const topicsData = {
-    "1": [
-        "Nhận biết số đến 100",
-        "Cộng trừ không nhớ phạm vi 100",
-        "Hình học cơ bản",
-        "Đo độ dài (cm)"
-    ],
-    "2": [
-        "Cộng trừ có nhớ phạm vi 100",
-        "Nhân chia 2 và 5",
-        "Xem giờ",
-        "Đo lường",
-        "Chu vi hình"
-    ],
-    "3": [
-        "Số đến 100000",
-        "Nhân chia số lớn",
-        "Bảng nhân 3-9",
-        "Góc vuông",
-        "Diện tích hình",
-        "Chia có dư"
-    ],
-    "4": [
-        "Số tự nhiên lớn",
-        "4 phép tính",
-        "Phân số",
-        "Các loại góc",
-        "Diện tích hình bình hành/thoi",
-        "Trung bình cộng"
-    ],
-    "5": [
-        "Số thập phân",
-        "Hỗn số",
-        "Phần trăm",
-        "Chuyển động",
-        "Hình học không gian",
-        "Toán lãi suất"
-    ]
-};
+            "1": ["Số đến 100", "Phép cộng phạm vi 100", "Hình học cơ bản"],
+            "2": ["Cộng trừ có nhớ", "Bảng nhân 2, 5", "Xem giờ", "Đơn vị đo"],
+            "3": ["Bảng nhân 3-9", "Diện tích/Chu vi", "Chia có dư"],
+            "4": ["Dấu hiệu chia hết", "Phân số", "Trung bình cộng"],
+            "5": ["Số thập phân", "Tỉ số phần trăm", "Vận tốc/Quãng đường"]
+        };
 
         let stats = { A: { c: 0, w: 0, wQs: [] }, B: { c: 0, w: 0, wQs: [] } };
         let questions = [], currentQIndex = 0, pullScore = 0, timer, timeLeft, gameActive = false;
@@ -404,136 +372,24 @@
 
         // --- HÀM HỆ THỐNG GIỮ NGUYÊN ---
         function updateTopics() {
-    const grade = document.getElementById('grade-select').value;
-    const topicSelect = document.getElementById('topic-select');
+            const g = document.getElementById('grade-select').value;
+            const ts = document.getElementById('topic-select');
+            ts.innerHTML = "";
+            topicsData[g].forEach(t => { let o = document.createElement('option'); o.value = t; o.innerText = t; ts.appendChild(o); });
+        }
 
-    topicSelect.innerHTML = "";
-
-    topicsData[grade].forEach(topic => {
-        const opt = document.createElement("option");
-        opt.value = topic;
-        opt.innerText = topic;
-        topicSelect.appendChild(opt);
-    });
-}
         function toggleQSource() {
             const isAI = document.getElementById('q-source').value === 'ai';
             document.getElementById('ai-config').style.display = isAI ? 'block' : 'none';
             document.getElementById('manual-settings').style.display = isAI ? 'none' : 'block';
         }
-        
+
         function toggleInfo() {
             const modal = document.getElementById('info-modal');
             const showing = modal.style.display === 'flex';
             modal.style.display = showing ? 'none' : 'flex';
             if (gameActive) isPaused = !showing;
         }
-        function generateQuestions(grade, topic) {
-    let qs = [];
-
-    function rand(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    for (let i = 0; i < 100; i++) {
-        let a, b, q, ans;
-
-        switch (grade) {
-
-            // ===== LỚP 1 =====
-            case "1":
-                if (topic.includes("Cộng")) {
-                    a = rand(0, 50);
-                    b = rand(0, 50);
-                    q = `${a} + ${b} = ?`;
-                    ans = a + b;
-                }
-                else if (topic.includes("trừ")) {
-                    a = rand(0, 100);
-                    b = rand(0, a);
-                    q = `${a} - ${b} = ?`;
-                    ans = a - b;
-                }
-                else {
-                    a = rand(0, 100);
-                    q = `Số liền trước của ${a} là gì?`;
-                    ans = a - 1;
-                }
-                break;
-
-            // ===== LỚP 2 =====
-            case "2":
-                if (topic.includes("Nhân")) {
-                    a = [2,5][rand(0,1)];
-                    b = rand(1,10);
-                    q = `${a} × ${b} = ?`;
-                    ans = a * b;
-                }
-                else if (topic.includes("chia")) {
-                    b = [2,5][rand(0,1)];
-                    a = rand(1,10);
-                    q = `${a*b} ÷ ${b} = ?`;
-                    ans = a;
-                }
-                else {
-                    a = rand(10,99);
-                    b = rand(10,99);
-                    q = `${a} + ${b} = ?`;
-                    ans = a + b;
-                }
-                break;
-
-            // ===== LỚP 3 =====
-            case "3":
-                a = rand(100,999);
-                b = rand(2,9);
-                q = `${a} × ${b} = ?`;
-                ans = a * b;
-                break;
-
-            // ===== LỚP 4 =====
-            case "4":
-                if (topic.includes("Phân số")) {
-                    a = rand(1,9);
-                    b = rand(1,9);
-                    q = `${a}/${b} + ${a}/${b} = ?`;
-                    ans = `${a+a}/${b}`;
-                } else {
-                    a = rand(100,999);
-                    b = rand(100,999);
-                    q = `${a} + ${b} = ?`;
-                    ans = a + b;
-                }
-                break;
-
-            // ===== LỚP 5 =====
-            case "5":
-                if (topic.includes("Phần trăm")) {
-                    a = rand(10,100);
-                    b = rand(1,100);
-                    q = `Tính ${b}% của ${a}`;
-                    ans = (a * b / 100);
-                }
-                else if (topic.includes("Vận tốc")) {
-                    a = rand(10,60);
-                    b = rand(1,5);
-                    q = `Đi ${a} km/h trong ${b} giờ được bao nhiêu km?`;
-                    ans = a * b;
-                }
-                else {
-                    a = (rand(10,100) / 10).toFixed(1);
-                    b = (rand(10,100) / 10).toFixed(1);
-                    q = `${a} + ${b} = ?`;
-                    ans = (parseFloat(a) + parseFloat(b)).toFixed(1);
-                }
-                break;
-        }
-
-        qs.push({ q: q, a: ans.toString() });
-    }
-
-    return qs;
-}
 
         function startGame() {
             const source = document.getElementById('q-source').value;
@@ -541,23 +397,13 @@
             const topic = document.getElementById('topic-select').value;
             
             if (source === 'manual') {
-    const text = document.getElementById('manual-data').value.trim();
-    if (!text) return alert("Chưa nhập câu hỏi!");
+                const text = document.getElementById('manual-data').value.trim();
+                if (!text) return alert("Chưa nhập câu hỏi!");
+                questions = text.split('\n').filter(l => l.includes('|')).map(l => ({ q: l.split('|')[0].trim(), a: l.split('|')[1].trim(), e: "Đáp án đã nhập tay." }));
+            } else {
+                questions = generateAIQuestions(grade, topic, 10);
+            }
 
-    questions = text.split('\n')
-        .filter(l => l.includes('|'))
-        .map(l => {
-            let [q,a] = l.split('|');
-            return { q: q.trim(), a: a.trim() };
-        });
-
-    // ✅ LƯU LẠI
-    localStorage.setItem('saved_questions', text);
-} else {
-                    const grade = document.getElementById('grade-select').value;
-                    const topic = document.getElementById('topic-select').value;
-                    questions = generateQuestions(grade, topic);
-}
             stats = { A: { c: 0, w: 0, wQs: [] }, B: { c: 0, w: 0, wQs: [] } };
             currentQIndex = 0; pullScore = 0; updateStatsUI(); updateTugUI();
             document.getElementById('setup-screen').style.display = 'none';
@@ -717,10 +563,10 @@
         
         window.onload = () => {
             updateTopics();
-            const saved = localStorage.getItem('saved_questions');
-            if (saved) {
-            document.getElementById('manual-data').value = saved;
-            };
+            const c = localStorage.getItem('tug_manual_cache');
+            if (c) document.getElementById('manual-data').value = c;
+        };
     </script>
 </body>
 </html>
+
