@@ -405,9 +405,13 @@
             const g = document.getElementById('grade-select').value;
             const ts = document.getElementById('topic-select');
             ts.innerHTML = "";
-            topicsData[g].forEach(t => { let o = document.createElement('option'); o.value = t; o.innerText = t; ts.appendChild(o); });
+            topicsData[g].forEach(t => {
+            let opt = document.createElement('option');
+            opt.value = t; opt.innerText = t;
+            ts.appendChild(opt);
+        });
         }
-        updateTopics()
+        updateTopics();
 
         function toggleQSource() {
             const isAI = document.getElementById('q-source').value === 'ai';
