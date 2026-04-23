@@ -407,6 +407,7 @@
             ts.innerHTML = "";
             topicsData[g].forEach(t => { let o = document.createElement('option'); o.value = t; o.innerText = t; ts.appendChild(o); });
         }
+        updateTopics()
 
         function toggleQSource() {
             const isAI = document.getElementById('q-source').value === 'ai';
@@ -592,7 +593,6 @@
         function clearHistory() { if(confirm("Xóa toàn bộ lịch sử?")) { localStorage.removeItem('tug_history'); showHistory(); } }
         
         window.onload = () => {
-            updateTopics();
             const c = localStorage.getItem('tug_manual_cache');
             if (c) document.getElementById('manual-data').value = c;
         };
