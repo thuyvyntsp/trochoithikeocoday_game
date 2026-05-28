@@ -194,7 +194,7 @@
             <div class="setting-group">
                 <label>Nguồn câu hỏi:</label>
                 <select id="q-source" onchange="toggleQSource()">
-                    <option value="ai">AI Tự tạo câu hỏi (Chính xác 100%)</option>
+                    <option value="ai">AI Tự tạo câu hỏi </option>
                     <option value="manual">Tự nhập danh sách</option>
                 </select>
             </div>
@@ -218,7 +218,7 @@
                 <label>Chế độ & Thời gian:</label>
                 <div style="display: flex; gap: 10px;">
                     <select id="play-mode" style="flex: 2;">
-                        <option value="2p">2 Người (Có cướp quyền)</option>
+                        <option value="2p">2 Người (Có giành quyền trả lời)</option>
                         <option value="1p">1 Người (Đấu với Máy)</option>
                     </select>
                     <input type="number" id="time-per-question" value="15" style="flex: 1;">
@@ -249,8 +249,8 @@
             <h2 id="question-text">Câu hỏi...</h2>
             
             <div class="buzz-area" id="buzz-area">
-                <button id="btn-buzz-a" class="btn-buzz buzz-a" onclick="buzzIn('A')">A CƯỚP QUYỀN!</button>
-                <button id="btn-buzz-b" class="btn-buzz buzz-b" onclick="buzzIn('B')">B CƯỚP QUYỀN!</button>
+                <button id="btn-buzz-a" class="btn-buzz buzz-a" onclick="buzzIn('A')">A GIÀNH QUYỀN TRẢ LỜI!</button>
+                <button id="btn-buzz-b" class="btn-buzz buzz-b" onclick="buzzIn('B')">B GIÀNH QUYỀN TRẢ LỜI!</button>
             </div>
 
             <div id="answer-section" style="display: none; gap: 10px; justify-content: center; flex-direction: column;">
@@ -535,7 +535,7 @@
                 document.getElementById('buzz-area').style.display = 'flex';
                 document.getElementById('btn-buzz-a').style.display = (otherTeam === 'A') ? 'block' : 'none';
                 document.getElementById('btn-buzz-b').style.display = (otherTeam === 'B') ? 'block' : 'none';
-                document.getElementById('turn-info').innerText = `ĐỘI ${answeringTeam} SAI! ĐỘI ${otherTeam} CÓ 5 GIÂY ĐỂ CƯỚP QUYỀN!`;
+                document.getElementById('turn-info').innerText = `ĐỘI ${answeringTeam} SAI! ĐỘI ${otherTeam} CÓ 5 GIÂY ĐỂ GIÀNH QUYỀN TRẢ LỜI!`;
                 stealTimer = setTimeout(() => { showFinalExplanation(); }, 5000);
             } else {
                 showFinalExplanation();
